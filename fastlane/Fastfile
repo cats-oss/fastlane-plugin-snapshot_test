@@ -1,0 +1,29 @@
+lane :test do
+  screenshot(
+      project_id: "project-id",
+      gcloud_service_key_file: "fastlane/client-secret.json",
+      devices:
+          [
+              {
+                  model: "shamu",
+                  version: "22",
+                  locale: "ja_JP",
+                  orientation: "portrait"
+              }
+          ],
+      app_apk: "apk/app.apk",
+      app_test_apk: "apk/test.apk",
+      firebase_test_lab_results_bucket: "firebase-test-lab-result-bucket",
+      download_dir: ".screenshot"
+  )
+  snapshot_test(
+      gcloud_service_key_file: "fastlane/client-secret.json",
+      snapshot_bucket: "bucket",
+      working_dir: ".snapshot_test",
+      screenshot_dir: ".screenshot/shamu-22-ja_JP-portrait",
+      github_owner: "GitHubOwner",
+      github_repository: "GitHubRepository",
+      github_pr_number: "GitHubPRNumber",
+      github_api_token: "GitHubApiToken"
+  )
+end

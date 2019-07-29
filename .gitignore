@@ -1,0 +1,23 @@
+.DS_store
+
+*.gem
+Gemfile.lock
+vendor/bundle
+.bundle/config
+
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+fastlane/README.md
+fastlane/report.xml
+coverage
+test-results
+fastlane/client-secret.json
+
+.idea
+
+*.apk
+.screenshot
+.snapshot
