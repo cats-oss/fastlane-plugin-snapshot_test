@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = 'lvla0805@gmail.com'
 
   spec.summary       = 'Compare snapshots'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-snapshot_test"
+  spec.homepage      = "https://github.com/cats-oss/fastlane-plugin-snapshot_test"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
