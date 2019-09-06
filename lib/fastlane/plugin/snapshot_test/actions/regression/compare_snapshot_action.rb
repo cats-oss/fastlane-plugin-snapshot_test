@@ -1,6 +1,8 @@
-require_relative '../helper/comparator'
-require_relative '../helper/github_notifier'
-require_relative '../helper/helper'
+require 'fastlane/action'
+
+require_relative '../../helper/comparator'
+require_relative '../../helper/github_notifier'
+require_relative '../../helper/helper'
 require 'json'
 
 module Fastlane

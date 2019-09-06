@@ -1,3 +1,5 @@
+require 'fastlane/action'
+
 module Fastlane
   module Actions
     class TakeScreenshotAction < Action
