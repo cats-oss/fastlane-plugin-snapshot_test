@@ -1,4 +1,4 @@
-require_relative '../helper/er/helper'
+require_relative '../helper/helper'
 
 module Fastlane
   module Actions
