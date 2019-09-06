@@ -2,7 +2,7 @@ require_relative '../helper/er/helper'
 
 module Fastlane
   module Actions
-    class DownloadSnapshotAction < Action
+    class UploadSnapshotAction < Action
       def self.run(params)
         Helper.authenticate(params[:gcloud_service_key_file])
 
@@ -17,11 +17,11 @@ module Fastlane
       end
 
       def self.description
-        "Download Snapshot"
+        "Upload Snapshot"
       end
 
       def self.details
-        "Download Snapshot"
+        "Upload Snapshot"
       end
 
       def self.available_options
