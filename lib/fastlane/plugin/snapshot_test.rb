@@ -5,6 +5,7 @@ module Fastlane
     # Return all .rb files inside the "actions" and "helper" directory
     def self.all_classes
       Dir[File.expand_path(
+          '**/actions/*.rb',
           '**/actions/**/*.rb',
           '**/helper/*.rb',
           File.dirname(__FILE__)
