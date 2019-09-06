@@ -46,18 +46,18 @@ module Fastlane
         bucket = params[:snapshot_bucket]
         commit_hash = Helper.get_current_commit_hash
 
-        message = <<-EOS
-## Snapshot Test Result
-Commit Hash: #{commit_hash}
-
-#{summary_table(result[:new_items], result[:deleted_items], result[:changed_items], result[:passed_items])}
-
-#{changed_items_table(result[:changed_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
-
-#{new_items_table(result[:new_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
-
-#{deleted_items_list(result[:deleted_items])}
-        EOS
+        message = <<-USAGE.strip_heredoc
+          ## Snapshot Test Result
+          Commit Hash: #{commit_hash}
+  
+          #{summary_table(result[:new_items], result[:deleted_items], result[:changed_items], result[:passed_items])}
+  
+          #{changed_items_table(result[:changed_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
+  
+          #{new_items_table(result[:new_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
+  
+          #{deleted_items_list(result[:deleted_items])}
+        USAGE
 
         GitHubNotifier.fold_comments(
             params[:github_owner],
