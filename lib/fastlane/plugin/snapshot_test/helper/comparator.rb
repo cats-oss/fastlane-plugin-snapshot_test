@@ -11,15 +11,15 @@ module Fastlane
 
     def self.compare_dir(expected_dir, actual_dir, diff_dir, fuzz)
       UI.message "Compare #{expected_dir} and #{actual_dir}"
-      expect_items = Dir.glob("#{expected_dir}/*.jpg").map {|path| File.basename(path)}
-      actual_items = Dir.glob("#{actual_dir}/*.jpg").map {|path| File.basename(path)}
+      expect_items = Dir.glob("#{expected_dir}/*.jpg").map { |path| File.basename(path) }
+      actual_items = Dir.glob("#{actual_dir}/*.jpg").map { |path| File.basename(path) }
 
       new_items = actual_items - expect_items
       deleted_items = expect_items - actual_items
       passed_items = []
       changed_items = []
 
-      (actual_items & expect_items).each {|fileName|
+      (actual_items & expect_items).each { |fileName|
         is_passed = compare("#{actual_dir}/#{fileName}", "#{expected_dir}/#{fileName}", "#{diff_dir}/#{fileName}", fuzz)
         if is_passed
           passed_items << fileName

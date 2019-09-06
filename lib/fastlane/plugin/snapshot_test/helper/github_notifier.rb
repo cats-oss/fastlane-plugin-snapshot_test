@@ -8,8 +8,8 @@ module Fastlane
     def self.fold_comments(github_owner, github_repository, github_pr_number, comment_prefix, summary, github_api_token)
       res = get_comments(github_owner, github_repository, github_pr_number, github_api_token)
       JSON.parse(res.body)
-          .select {|comment| comment["body"].start_with?(comment_prefix)}
-          .each {|comment|
+          .select { |comment| comment["body"] != nil && comment["body"].start_with?(comment_prefix) }
+          .each { |comment|
             body = "<details><summary>#{summary}</summary>\n#{comment["body"]}\n\n</details>\n"
             patch_comment(github_owner, github_repository, comment["id"], body, github_api_token)
           }
@@ -18,8 +18,8 @@ module Fastlane
     def self.delete_comments(github_owner, github_repository, github_pr_number, comment_prefix, github_api_token)
       res = get_comments(github_owner, github_repository, github_pr_number, github_api_token)
       JSON.parse(res.body)
-          .select {|comment| comment["body"].start_with?(comment_prefix)}
-          .each {|comment| delete_comment(github_owner, github_repository, comment["id"], github_api_token)}
+          .select { |comment| comment["body"] != nil && comment["body"].start_with?(comment_prefix) }
+          .each { |comment| delete_comment(github_owner, github_repository, comment["id"], github_api_token) }
     end
 
     def self.get_comments(github_owner, github_repository, github_pr_number, github_api_token)
@@ -31,7 +31,7 @@ module Fastlane
       req["Content-Type"] = "application/json"
       req["Authorization"] = "token #{github_api_token}"
 
-      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) {|http| http.request(req)}
+      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) { |http| http.request(req) }
       UI.message "#{res.code}\n#{res.body}"
 
       res
@@ -47,7 +47,7 @@ module Fastlane
       req["Authorization"] = "token #{github_api_token}"
       req.body = {:body => body}.to_json
 
-      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) {|http| http.request(req)}
+      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) { |http| http.request(req) }
       UI.message "#{res.code}\n#{res.body}"
 
       res
@@ -63,7 +63,7 @@ module Fastlane
       req["Authorization"] = "token #{github_api_token}"
       req.body = {:body => body}.to_json
 
-      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) {|http| http.request(req)}
+      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) { |http| http.request(req) }
       UI.message "#{res.code}\n#{res.body}"
 
       res
@@ -78,7 +78,7 @@ module Fastlane
       req["Content-Type"] = "application/json"
       req["Authorization"] = "token #{github_api_token}"
 
-      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) {|http| http.request(req)}
+      res = Net::HTTP.start(uri.hostname, uri.port, {use_ssl: uri.scheme = "https"}) { |http| http.request(req) }
       UI.message "#{res.code}\n#{res.body}"
 
       res
