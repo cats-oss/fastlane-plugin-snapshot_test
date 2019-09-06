@@ -1,6 +1,6 @@
 module Fastlane
   module Actions
-    class ScreenshotAction < Action
+    class TakeScreenshotAction < Action
       def self.run(params)
         download_dir = params[:download_dir]
 
