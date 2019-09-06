@@ -1,5 +1,5 @@
-require_relative '../../helper/github_notifier'
-require_relative '../../helper/helper'
+require_relative '../helper/github_notifier'
+require_relative '../helper/helper'
 require 'json'
 
 module Fastlane
