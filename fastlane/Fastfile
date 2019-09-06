@@ -1,5 +1,5 @@
 lane :test do
-  screenshot(
+  take_screenshot(
       project_id: "project-id",
       gcloud_service_key_file: "fastlane/client-secret.json",
       devices:
@@ -16,7 +16,7 @@ lane :test do
       firebase_test_lab_results_bucket: "firebase-test-lab-result-bucket",
       download_dir: ".screenshot"
   )
-  snapshot_test(
+  compare_snapshot(
       gcloud_service_key_file: "fastlane/client-secret.json",
       snapshot_bucket: "bucket",
       working_dir: ".snapshot_test",
