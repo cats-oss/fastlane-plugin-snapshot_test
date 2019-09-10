@@ -222,6 +222,22 @@ Commit Hash: #{commit_hash}
       def self.is_supported?(platform)
         true
       end
+
+      def self.example_code
+        ['pr_number = ENV["CI_PULL_REQUEST"] != nil ? ENV["CI_PULL_REQUEST"][/(?<=https:\/\/github.com\/cats-oss\/android\/pull\/)(.*)/] : nil
+        compare_snapshot(
+            gcloud_service_key_file: "fastlane/client-secret.json",
+            snapshot_bucket: "cats-android-snapshot",
+            working_dir: ".snapshot_test",
+            screenshot_dir: ".screenshot/shamu-22-ja_JP-portrait",
+            github_owner: "cats-oss",
+            github_repository: "android",
+            github_pr_number: pr_number,
+            github_api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+            image_length: 100
+      )']
+      end
+
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'fastlane/action'
+
 require_relative '../../helper/helper'
 
 module Fastlane
@@ -160,6 +161,20 @@ module Fastlane
       def self.is_supported?(platform)
         platform == :android
       end
+
+      def self.example_code
+        ['screenshot_notifier(
+            gcloud_service_key_file: "fastlane/client-secret.json",
+            screenshot_bucket: "cats-firebase",
+            screenshot_dir: ".screenshot",
+            github_owner: "cats-oss",
+            github_repository: "android",
+            github_pr_number: ENV["CI_PULL_REQUEST"][/(?<=https:\/\/github.com\/cats-oss\/android\/pull\/)(.*)/],
+            github_api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+            image_length: 100
+        )']
+      end
+
     end
   end
 end
