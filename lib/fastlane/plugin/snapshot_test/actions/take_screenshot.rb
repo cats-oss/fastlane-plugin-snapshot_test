@@ -1,6 +1,8 @@
+require 'fastlane/action'
+
 module Fastlane
   module Actions
-    class ScreenshotAction < Action
+    class TakeScreenshotAction < Action
       def self.run(params)
         download_dir = params[:download_dir]
 
@@ -114,6 +116,31 @@ module Fastlane
           hash_obj[property] = default
         end
       end
+
+      def self.example_code
+        ['take_screenshot(
+            project_id: "cats-firebase",
+            gcloud_service_key_file: "fastlane/client-secret.json",
+            devices: [
+              {
+                  model: "shamu",
+                  version: "22",
+                  locale: "ja_JP",
+                  orientation: "portrait"
+              },
+              {
+                  model: "Pixel2",
+                  version: "28"
+              }
+            ],
+            app_apk: "tools/app-snapshot-debug.apk",
+            app_test_apk: "app/build/outputs/apk/androidTest/snapshot/debug/installedapp-snapshot-debug-androidTest.apk",
+            firebase_test_lab_results_bucket: "cats-android-firebase-instrumented-test",
+            timeout: "10m",
+            download_dir: ".screenshot"
+        )']
+      end
+
     end
   end
 end

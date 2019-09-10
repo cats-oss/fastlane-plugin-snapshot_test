@@ -1,8 +1,10 @@
-require_relative '../helper/helper'
+require 'fastlane/action'
+
+require_relative '../../helper/helper'
 
 module Fastlane
   module Actions
-    class SaveSnapshotAction < Action
+    class UploadSnapshotAction < Action
       def self.run(params)
         Helper.authenticate(params[:gcloud_service_key_file])
 
@@ -17,11 +19,11 @@ module Fastlane
       end
 
       def self.description
-        "Save Snapshot"
+        "Upload Snapshot"
       end
 
       def self.details
-        "Save Snapshot"
+        "Upload Snapshot"
       end
 
       def self.available_options
@@ -56,6 +58,16 @@ module Fastlane
       def self.is_supported?(platform)
         true
       end
+
+      def self.example_code
+        ['upload_snapshot(
+            gcloud_service_key_file: "fastlane/client-secret.json",
+            snapshot_bucket: "cats-android-snapshot",
+            working_dir: ".snapshot_test",
+            screenshot_dir: ".screenshot/shamu-22-ja_JP-portrait"
+        )']
+      end
+
     end
   end
 end

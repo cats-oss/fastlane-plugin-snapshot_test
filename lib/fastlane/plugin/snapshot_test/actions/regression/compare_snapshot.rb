@@ -1,10 +1,13 @@
-require_relative '../helper/github_notifier'
-require_relative '../helper/helper'
+require 'fastlane/action'
+
+require_relative '../../helper/comparator'
+require_relative '../../helper/github_notifier'
+require_relative '../../helper/helper'
 require 'json'
 
 module Fastlane
   module Actions
-    class SnapshotTestAction < Action
+    class CompareSnapshotAction < Action
       def self.run(params)
         Helper.authenticate(params[:gcloud_service_key_file])
 
@@ -32,7 +35,7 @@ module Fastlane
         `rm -rf #{working_dir}/diff`
         `mkdir #{working_dir}/diff`
         result = Comparator.compare_dir("#{working_dir}/expected", "#{working_dir}/actual", "#{working_dir}/diff", params[:fuzz])
-        open("#{working_dir}/result.json", "w") {|io| io.puts(JSON.pretty_generate(result))}
+        open("#{working_dir}/result.json", "w") { |io| io.puts(JSON.pretty_generate(result)) }
         Action.sh "gsutil -m rsync -d -r #{working_dir} gs://#{snapshot_bucket}/#{Helper.get_current_commit_hash}"
 
         UI.message result
@@ -46,17 +49,17 @@ module Fastlane
         bucket = params[:snapshot_bucket]
         commit_hash = Helper.get_current_commit_hash
 
-        message = <<-EOS
-## Snapshot Test Result
-Commit Hash: #{commit_hash}
+        message = <<~EOS
+          ## Snapshot Test Result
+          Commit Hash: #{commit_hash}
 
-#{summary_table(result[:new_items], result[:deleted_items], result[:changed_items], result[:passed_items])}
+          #{summary_table(result[:new_items], result[:deleted_items], result[:changed_items], result[:passed_items])}
 
-#{changed_items_table(result[:changed_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
+          #{changed_items_table(result[:changed_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
 
-#{new_items_table(result[:new_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
+          #{new_items_table(result[:new_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
 
-#{deleted_items_list(result[:deleted_items])}
+        #{deleted_items_list(result[:deleted_items])}
         EOS
 
         GitHubNotifier.fold_comments(
@@ -77,14 +80,14 @@ Commit Hash: #{commit_hash}
       end
 
       def self.summary_table(new_items, deleted_items, changed_items, passed_items)
-        <<-EOS
-### Summary
-|  | Count |
-| --- | --- |
-| New Screenshots | #{new_items.size} |
-| Deleted Screenshots | #{deleted_items.size} |
-| Changed Screenshots | #{changed_items.size} |
-| Passed Screenshots | #{passed_items.size} |
+        <<~EOS
+          ### Summary
+          |  | Count |
+          | --- | --- |
+          | New Screenshots | #{new_items.size} |
+          | Deleted Screenshots | #{deleted_items.size} |
+          | Changed Screenshots | #{changed_items.size} |
+          | Passed Screenshots | #{passed_items.size} |
         EOS
       end
 
@@ -92,7 +95,7 @@ Commit Hash: #{commit_hash}
         return "" if changed_items.empty?
 
         header = "<tr><td></td><td>Before</td><td>After</td><td>Diff</td></tr>"
-        cells = changed_items.map {|item|
+        cells = changed_items.map { |item|
           size_attr = generate_size_attr("#{working_dir}/actual/#{item}", image_height)
 
           before = "<img src=\"#{object_url(bucket, commit_hash, item, "expected")}\" #{size_attr} />"
@@ -107,9 +110,9 @@ Commit Hash: #{commit_hash}
       def self.new_items_table(new_items, bucket, commit_hash, working_dir, image_height)
         return "" if new_items.empty?
 
-        rows = new_items.each_slice(3).map {|oneline_items|
-          labels = oneline_items.map {|item| "<td>#{item}</td>"}.inject(&:+)
-          imgs = oneline_items.map {|item|
+        rows = new_items.each_slice(3).map { |oneline_items|
+          labels = oneline_items.map { |item| "<td>#{item}</td>" }.inject(&:+)
+          imgs = oneline_items.map { |item|
             size_attr = generate_size_attr("#{working_dir}/actual/#{item}", image_height)
             "<td><img src=\"#{object_url(bucket, commit_hash, item, "actual")}\" #{size_attr} /></td>"
           }.inject(&:+)
@@ -122,7 +125,7 @@ Commit Hash: #{commit_hash}
       def self.deleted_items_list(deleted_items)
         return "" if deleted_items.empty?
 
-        "### Deleted Screenshots\n<details><summary>Open</summary>\n\n#{deleted_items.map {|item| "- #{item}\n"}.inject(&:+)}</details>\n"
+        "### Deleted Screenshots\n<details><summary>Open</summary>\n\n#{deleted_items.map { |item| "- #{item}\n" }.inject(&:+)}</details>\n"
       end
 
       def self.object_url(bucket, commit_hash, item_name, image_type)
@@ -151,7 +154,7 @@ Commit Hash: #{commit_hash}
       end
 
       def self.authors
-        ["Moyuru Aizawa"]
+        ["MoyuruAizawa"]
       end
 
       def self.available_options
@@ -219,6 +222,22 @@ Commit Hash: #{commit_hash}
       def self.is_supported?(platform)
         true
       end
+
+      def self.example_code
+        ['pr_number = ENV["CI_PULL_REQUEST"] != nil ? ENV["CI_PULL_REQUEST"][/(?<=https:\/\/github.com\/cats-oss\/android\/pull\/)(.*)/] : nil
+        compare_snapshot(
+            gcloud_service_key_file: "fastlane/client-secret.json",
+            snapshot_bucket: "cats-android-snapshot",
+            working_dir: ".snapshot_test",
+            screenshot_dir: ".screenshot/shamu-22-ja_JP-portrait",
+            github_owner: "cats-oss",
+            github_repository: "android",
+            github_pr_number: pr_number,
+            github_api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+            image_length: 100
+      )']
+      end
+
     end
   end
 end

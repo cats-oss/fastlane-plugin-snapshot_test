@@ -20,9 +20,9 @@ module Fastlane
     def self.find_base_commit_hash(bucket_name, base_branch, current_branch)
       base_commit_hash = Action.sh("git merge-base origin/#{base_branch} #{current_branch}").chomp!
       dirs = `gsutil ls gs://#{bucket_name}/ | grep -e "/$"`.split("\n")
-                 .map {|s| s[/(?<=gs:\/\/#{bucket_name}\/)(.*)(?=\/)/]}
+                 .map { |s| s[/(?<=gs:\/\/#{bucket_name}\/)(.*)(?=\/)/] }
       hashes = Action.sh("git log origin/#{base_branch} --pretty=%H").split("\n")
-      hashes[hashes.index(base_commit_hash)..-1].each {|hash|
+      hashes[hashes.index(base_commit_hash)..-1].each { |hash|
         if dirs.include?(hash)
           return hash
         end
@@ -36,6 +36,7 @@ module Fastlane
 
     def self.calc_aspect_ratio(imagePath)
       width, height = FastImage.size(imagePath)
+      UI.message "Image(#{imagePath}) size #{width} * #{height}"
       height / width.to_f
     end
   end

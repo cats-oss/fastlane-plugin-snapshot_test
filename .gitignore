@@ -16,8 +16,14 @@ coverage
 test-results
 fastlane/client-secret.json
 
-.idea
+# IntelliJ
+*.iml
+.idea/
 
+# Android
 *.apk
+
+# Plugin outputs
 .screenshot
 .snapshot
+
