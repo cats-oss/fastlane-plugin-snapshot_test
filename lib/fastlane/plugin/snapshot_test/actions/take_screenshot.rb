@@ -27,10 +27,14 @@ module Fastlane
         device_names.each do |device_name|
           `mkdir -p #{download_dir}/#{device_name}`
           Action.sh "gsutil -m rsync -d -r gs://#{firebase_test_lab_results_bucket}/#{firebase_test_lab_results_dir}/#{device_name}/artifacts #{download_dir}/#{device_name}"
-          Action.sh "mogrify -scale 320x #{download_dir}/#{device_name}/*.jpg"
-          Action.sh "mogrify -scale 320x #{download_dir}/#{device_name}/*.jpeg"
-          Action.sh "mogrify -scale 320x #{download_dir}/#{device_name}/*.png"
           `rm -rf #{download_dir}/#{device_name}/sdcard`
+
+          entries = Dir::entries("#{download_dir}/#{device_name}")
+          entries = entries.select { |entry| entry =~ /^.*\.(|jpeg|png|jpg)$/ }
+          for entry in entries do
+            filePath = "#{download_dir}/#{device_name}/#{entry}"
+            Action.sh "convert #{filePath} -scale 320x #{filePath}"
+          end
         end
       end
 
