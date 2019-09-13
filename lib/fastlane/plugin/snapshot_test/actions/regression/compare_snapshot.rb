@@ -50,14 +50,14 @@ module Fastlane
         commit_hash = Helper.get_current_commit_hash
 
         message = <<~EOS
-          ## Snapshot Test Result
-          Commit Hash: #{commit_hash}
+        ## Snapshot Test Result
+        Commit Hash: #{commit_hash}
 
-          #{summary_table(result[:new_items], result[:deleted_items], result[:changed_items], result[:passed_items])}
+        #{summary_table(result[:new_items], result[:deleted_items], result[:changed_items], result[:passed_items])}
 
-          #{changed_items_table(result[:changed_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
+        #{changed_items_table(result[:changed_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
 
-          #{new_items_table(result[:new_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
+        #{new_items_table(result[:new_items], bucket, commit_hash, params[:working_dir], params[:image_length])}
 
         #{deleted_items_list(result[:deleted_items])}
         EOS
@@ -81,13 +81,13 @@ module Fastlane
 
       def self.summary_table(new_items, deleted_items, changed_items, passed_items)
         <<~EOS
-          ### Summary
-          |  | Count |
-          | --- | --- |
-          | New Screenshots | #{new_items.size} |
-          | Deleted Screenshots | #{deleted_items.size} |
-          | Changed Screenshots | #{changed_items.size} |
-          | Passed Screenshots | #{passed_items.size} |
+        ### Summary
+        |  | Count |
+        | --- | --- |
+        | New Screenshots | #{new_items.size} |
+        | Deleted Screenshots | #{deleted_items.size} |
+        | Changed Screenshots | #{changed_items.size} |
+        | Passed Screenshots | #{passed_items.size} |
         EOS
       end
 
