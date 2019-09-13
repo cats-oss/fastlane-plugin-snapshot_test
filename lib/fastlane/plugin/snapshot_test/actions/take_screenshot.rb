@@ -29,8 +29,7 @@ module Fastlane
           Action.sh "gsutil -m rsync -d -r gs://#{firebase_test_lab_results_bucket}/#{firebase_test_lab_results_dir}/#{device_name}/artifacts #{download_dir}/#{device_name}"
           `rm -rf #{download_dir}/#{device_name}/sdcard`
 
-          entries = Dir::entries("#{download_dir}/#{device_name}")
-          entries = entries.select { |entry| entry =~ /^.*\.(|jpeg|png|jpg)$/ }
+          entries = Dir::entries("#{download_dir}/#{device_name}").select { |entry| entry =~ /^.*\.(jpg|jpeg|png)/ }
           for entry in entries do
             filePath = "#{download_dir}/#{device_name}/#{entry}"
             Action.sh "convert #{filePath} -scale 320x #{filePath}"
