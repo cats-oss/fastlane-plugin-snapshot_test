@@ -18,7 +18,6 @@ module Fastlane
             app_test_apk: params[:app_test_apk],
             console_log_file_name: "#{download_dir}/firebase_os_test_console.log",
             timeout: params[:timeout],
-            notify_to_slack: false,
             extra_options: "--results-bucket #{firebase_test_lab_results_bucket} --results-dir #{firebase_test_lab_results_dir} --no-record-video"
         )
 
