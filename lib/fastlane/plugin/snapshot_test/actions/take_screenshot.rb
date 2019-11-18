@@ -143,7 +143,7 @@ module Fastlane
             ],
             app_apk: "tools/app-snapshot-debug.apk",
             app_test_apk: "app/build/outputs/apk/androidTest/snapshot/debug/installedapp-snapshot-debug-androidTest.apk",
-            results_bucket: "cats-android-firebase-instrumented-test",
+            firebase_test_lab_results_bucket: "cats-android-firebase-instrumented-test",
             timeout: "10m",
             download_dir: ".screenshot"
         )']
