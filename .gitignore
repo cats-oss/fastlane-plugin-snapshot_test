@@ -14,7 +14,7 @@ fastlane/README.md
 fastlane/report.xml
 coverage
 test-results
-fastlane/client-secret.json
+client-secret.json
 
 # IntelliJ
 *.iml

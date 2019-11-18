@@ -13,13 +13,13 @@ lane :test do
           ],
       app_apk: "apk/app.apk",
       app_test_apk: "apk/test.apk",
-      firebase_test_lab_results_bucket: "firebase-test-lab-result-bucket",
+      firebase_test_lab_results_bucket: "firebase_cats_test_bucket",
       download_dir: ".screenshot"
 
   pr_number = ENV["CI_PULL_REQUEST"] != nil ? ENV["CI_PULL_REQUEST"][/(?<=https:\/\/github.com\/cats-oss\/android\/pull\/)(.*)/] : nil
   compare_snapshot(
       gcloud_service_key_file: "fastlane/client-secret.json",
-      snapshot_bucket: "cats-android-compare",
+      snapshot_bucket: "firebase_cats_test_bucket_compare",
       working_dir: ".snapshot_test",
       screenshot_dir: ".screenshot/shamu-22-ja_JP-portrait",
       github_owner: "cats-oss",
@@ -30,14 +30,14 @@ lane :test do
 
   upload_snapshot(
       gcloud_service_key_file: "fastlane/client-secret.json",
-      snapshot_bucket: "cats-android-snapshot",
+      snapshot_bucket: "firebase_cats_test_bucket_upload",
       working_dir: ".snapshot_test",
       screenshot_dir: ".screenshot/shamu-22-ja_JP-portrait"
   )
 
   screenshot_notifier(
       gcloud_service_key_file: "fastlane/client-secret.json",
-      screenshot_bucket: "cats-android-screenshot",
+      screenshot_bucket: "firebase_cats_test_bucket_screenshot",
       screenshot_dir: ".screenshot",
       github_owner: "cats-oss",
       github_repository: "android",

@@ -6,8 +6,8 @@ module Fastlane
       def self.run(params)
         download_dir = params[:download_dir]
 
-        firebase_test_lab_results_bucket = params[:firebase_test_lab_results_bucket] == nil ? "#{params[:project_id]}_test_results" : params[:firebase_test_lab_results_bucket]
-        firebase_test_lab_results_dir = "firebase_screenshot_#{DateTime.now.strftime('%Y-%m-%d-%H:%M:%S')}"
+        results_bucket = params[:firebase_test_lab_results_bucket] ? "#{params[:project_id]}_test_results" : params[:firebase_test_lab_results_bucket]
+        results_dir = "firebase_screenshot_#{DateTime.now.strftime('%Y-%m-%d-%H:%M:%S')}"
         devices = params[:devices]
         Fastlane::Actions::FirebaseTestLabAndroidAction.run(
             project_id: params[:project_id],
@@ -18,15 +18,16 @@ module Fastlane
             app_test_apk: params[:app_test_apk],
             console_log_file_name: "#{download_dir}/firebase_os_test_console.log",
             timeout: params[:timeout],
-            notify_to_slack: false,
-            extra_options: "--results-bucket #{firebase_test_lab_results_bucket} --results-dir #{firebase_test_lab_results_dir} --no-record-video"
+            firebase_test_lab_results_bucket: results_bucket,
+            firebase_test_lab_results_dir: results_dir,
+            extra_options: "--no-record-video"
         )
 
         UI.message "Fetch screenshots from Firebase Test Lab results bucket"
         device_names = devices.map(&method(:device_name))
         device_names.each do |device_name|
           `mkdir -p #{download_dir}/#{device_name}`
-          Action.sh "gsutil -m rsync -d -r gs://#{firebase_test_lab_results_bucket}/#{firebase_test_lab_results_dir}/#{device_name}/artifacts #{download_dir}/#{device_name}"
+          Action.sh "gsutil -m rsync -d -r gs://#{results_bucket}/#{results_dir}/#{device_name}/artifacts #{download_dir}/#{device_name}"
           `rm -rf #{download_dir}/#{device_name}/sdcard`
 
           entries = Dir::entries("#{download_dir}/#{device_name}").select { |entry| entry =~ /^.*\.(jpg|jpeg|png)/ }
@@ -95,7 +96,8 @@ module Fastlane
                                          env_name: "FIREBASE_TEST_LAB_RESULTS_BUCKET",
                                          description: "Name of Firebase Test Lab results bucket",
                                          type: String,
-                                         optional: true),
+                                         optional: true,
+                                         default_value: nil),
             FastlaneCore::ConfigItem.new(key: :download_dir,
                                          env_name: "DOWNLOAD_DIR",
                                          description: "Target directory to download screenshots from firebase",
