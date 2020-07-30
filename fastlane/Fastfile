@@ -15,8 +15,10 @@ lane :test do
       app_test_apk: "apk/test.apk",
       firebase_test_lab_results_bucket: "firebase_cats_test_bucket",
       download_dir: ".screenshot"
+  )
 
-  pr_number = ENV["CI_PULL_REQUEST"] != nil ? ENV["CI_PULL_REQUEST"][/(?<=https:\/\/github.com\/cats-oss\/android\/pull\/)(.*)/] : nil
+  pr_number = ENV["CI_PULL_REQUEST"] != nil ? ENV["CI_PULL_REQUEST"][/(?<=https:\/\/github.com\/cats-oss\/android\/pull\/)(.*)/] : nil\
+
   compare_snapshot(
       gcloud_service_key_file: "fastlane/client-secret.json",
       snapshot_bucket: "firebase_cats_test_bucket_compare",
